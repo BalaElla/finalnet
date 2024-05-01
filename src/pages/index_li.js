@@ -1,16 +1,13 @@
-// pages/index.js
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Container, Row, Col } from "react-bootstrap";
 
 import Head from "next/head";
-import Bubble from "../components/bubble"; 
-import Top5LineChart from '../components/top5line'; 
+import Top5LineChart from "../components/top5line"; // Import the Top5LineChart component
 import styles from "@/styles/Home.module.css";
 
 import { csv } from 'd3-fetch';
 import groupByCountry from '../components/utils'; // Make sure to correctly import the function from utils.js
-import groupByCountryYear from '../components/utils_li'; 
 
 export async function getStaticProps() {
   const csvUrl = 'https://raw.githubusercontent.com/BalaElla/ivfinal/main/Netflix_Titles_Updated_Final.csv';
@@ -18,31 +15,27 @@ export async function getStaticProps() {
   try {
     const data = await csv(csvUrl, d => ({
       Country_0: d.Country_0, // Assuming 'Country_0' is your primary country column
-      type: d.type,           // Keeping the type in case you need it later for different purposes
-      date_added: d.date_added
+      type: d.type,
+      date_added: d.date_added           // Keeping the type in case you need it later for different purposes
     }));
 
     // console.log("groupByCountry function:", groupByCountry); // 输出 groupByCountry 函数
 
     // Use groupByCountry from utils.js to process the data
-    // const processedData = groupByCountryYear(data)
-    const bubbleData = groupByCountry(data);
-    const lineChartData = groupByCountryYear(data);
+    const processedData = groupByCountry(data);
 
-    // console.log(processedData); // Log the processed data to see the output
+    console.log(processedData); // Log the processed data to see the output
 
     return {
       props: {
-        bubbleData,
-        lineChartData
+        data: processedData
       }
     };
   } catch (error) {
     console.error("Error fetching or parsing data:", error);
     return {
       props: {
-        bubbleData: [],
-        lineChartData: [] // Return an empty array in case of error
+        data: [] // Return an empty array in case of error
       }
     };
   }
@@ -61,10 +54,7 @@ export default function Home({ data }) {
         <Container fluid>
           <Row>
             <Col>
-              <Bubble width={600} height={400} data={ bubbleData } />
-            </Col>
-            <Col md={6}>
-            <Top5LineChart data={ lineChartData } />
+              <Top5LineChart lineChartData={data} /> {/* Render the Top5LineChart component */}
             </Col>
           </Row>
         </Container>
