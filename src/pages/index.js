@@ -24,7 +24,7 @@ export async function getStaticProps() {
     // Use groupByCountry from utils.js to process the data
     const processedData = groupByCountry(data);
 
-    console.log(processedData); // Log the processed data to see the output
+    // console.log(processedData); // Log the processed data to see the output
 
     return {
       props: {
