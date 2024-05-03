@@ -106,7 +106,7 @@ a {
   }
 }
 
-.tooltip {
+/* .tooltip {
   position: absolute;
   text-align: center;
   padding: 8px;
@@ -115,4 +115,17 @@ a {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+} */
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 8px;
+  font: 12px sans-serif;
+  background: lightsteelblue; /* 考虑更浅的颜色如果和背景冲突 */
+  color: black; /* 确保文字颜色与背景对比度高 */
+  border: 1px solid #ccc; /* 可以添加边框以更好地区分 */
+  border-radius: 8px;
+  pointer-events: none; /* 防止鼠标事件影响tooltip的显示 */
+  opacity: 0.9; /* 轻微的透明度可以增强视觉效果 */
 }

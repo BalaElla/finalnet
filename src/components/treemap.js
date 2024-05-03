@@ -1,68 +1,16 @@
-// // treemap.js
-// import React, { useRef, useEffect } from 'react';
-// import * as d3 from 'd3';
-
-// const Treemap = ({ data, width, height }) => {
-//   const ref = useRef();
-
-//   useEffect(() => {
-//     if (!data || Object.keys(data).length === 0) return;  // 检查数据是否有效
-
-//     // 选择SVG元素
-//     const svg = d3.select(ref.current);
-//     svg.selectAll("*").remove();  // 清除之前的绘图
-
-//     // 创建树状图布局
-//     const root = d3.hierarchy({ children: Object.values(data) }).sum(d => d.value);
-
-//     d3.treemap()
-//       .size([width, height])
-//       .padding(1)(root);
-
-//     // 绘制每个节点
-//     svg.selectAll('rect')
-//       .data(root.leaves())
-//       .enter()
-//       .append('rect')
-//         .attr('x', d => d.x0)
-//         .attr('y', d => d.y0)
-//         .attr('width', d => d.x1 - d.x0)
-//         .attr('height', d => d.y1 - d.y0)
-//         .style('fill', 'steelblue');
-
-//     // 添加标签
-//     svg.selectAll('text')
-//       .data(root.leaves())
-//       .enter()
-//       .append('text')
-//         .attr('x', d => d.x0 + 5)
-//         .attr('y', d => d.y0 + 20)
-//         .text(d => d.data.name)
-//         .attr('font-size', '15px')
-//         .attr('fill', 'white');
-//   }, [data]);
-
-//   return <svg ref={ref} width={width} height={height}></svg>;
-// };
-
-// export default Treemap;
-
-// treemap.js
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
 const Treemap = ({ data, width, height }) => {
   const ref = useRef();
-  const colorScale = d3.scaleOrdinal(d3.schemeCategory10); // 使用 D3 的颜色方案
 
   useEffect(() => {
-    if (!data || data.length === 0) return; // 检查数据是否有效
-
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove(); // 清除之前的绘图
 
-    const root = d3.hierarchy({ children: data }).sum(d => d.value);
+    const tooltip = d3.select(".tooltip"); // 确保 tooltip 使用现有的 CSS 类
 
+    const root = d3.hierarchy({ children: data }).sum(d => d.value);
     d3.treemap().size([width, height]).padding(2)(root);
 
     const cell = svg.selectAll("g")
@@ -73,35 +21,34 @@ const Treemap = ({ data, width, height }) => {
     cell.append('rect')
       .attr('width', d => d.x1 - d.x0)
       .attr('height', d => d.y1 - d.y0)
-      .attr('fill', d => colorScale(d.parent.data.name)) // 根据 parent name 着色
+      .attr('fill', d => d3.scaleOrdinal(d3.schemeCategory10)(d.data.name))
       .on("mouseover", (event, d) => {
-        // 在鼠标悬停时显示提示
-        tooltip.text(d.data.name + ": " + d.value);
-        tooltip.style("visibility", "visible");
+        tooltip.style("visibility", "visible")
+               .text(d.data.name + " (" + d.value + ")");
       })
       .on("mousemove", (event) => {
-        tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+        tooltip.style("top", (event.pageY - 10) + "px")
+               .style("left", (event.pageX + 10) + "px");
       })
       .on("mouseout", () => {
         tooltip.style("visibility", "hidden");
       });
 
-    cell.append('text')
-      .attr('dx', 4)
-      .attr('dy', 14)
-      .text(d => d.data.name);
+    // 如果需要显示国家名称
+    svg.selectAll(".title")
+      .data(root.descendants().filter(d => d.depth === 1))
+      .enter().append('text')
+      .attr('x', d => d.x0 + 6)
+      .attr('y', d => d.y0 + 20)
+      .text(d => d.data.name)
+      .attr('font-size', '16px')
+      .attr('font-weight', 'bold')
+      .attr('fill', 'white');
 
-    // 添加用于显示提示的元素
-    const tooltip = d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("z-index", "10")
-      .style("visibility", "hidden")
-      .text("a simple tooltip");
-
-  }, [data, colorScale]);
+  }, [data]);
 
   return <svg ref={ref} width={width} height={height}></svg>;
 };
 
 export default Treemap;
+

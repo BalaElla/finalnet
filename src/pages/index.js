@@ -15,7 +15,8 @@ import groupByCountryYear from '../components/utils_li';
 import groupByCountryTypeAndGenre from '../components/utils_3'; 
 
 export async function getStaticProps() {
-  const csvUrl = 'https://raw.githubusercontent.com/BalaElla/ivfinal/main/Netflix_Titles_Updated_Final_2.csv';
+  const csvUrl = 'https://raw.githubusercontent.com/BalaElla/ivfinal/main/Netflix_Titles_Updated_Final.csv';
+  
 
   try {
     const data = await csv(csvUrl, d => ({
