@@ -1,226 +1,206 @@
 // import React, { useState } from "react";
 // import { XAxis, YAxis } from "./axes";
-// import { scaleLinear, scaleOrdinal, line, extent, schemeCategory10 } from 'd3';
+// import { scaleTime, scaleLinear, scaleOrdinal, line, extent, schemeSet3 } from 'd3';
 
-// function Top5LineChart({ data }) {
-//   const width = 600; // 设置图表宽度
-//   const height = 400; // 设置图表高度
+// // function Top5LineChart({ data }) {
+// //   const width = 800; // 图表宽度
+// //   const height = 400; // 图表高度
+// //   const margin = { top: 20, right: 150, bottom: 50, left: 60 };
 
-//   // 计算电影和电视节目的最大数量，以便确定纵坐标范围
-//   const maxMovieCount = Math.max(...data.flatMap(d => d.Years.map(y => y.Movies)));
-//   const maxTVShowCount = Math.max(...data.flatMap(d => d.Years.map(y => y.TVShows)));
+// //   // 创建比例尺
+// //   const xScale = scaleTime()
+// //     .domain(extent(data.flatMap(country => country.Years.map(y => new Date(y.year, 0, 1)))))
+// //     .range([margin.left, width - margin.right]);
 
-//   // 创建比例尺
-//   const xScale = scaleLinear()
-//     .domain(extent(data.flatMap(d => d.Years.map(y => y.year))))
-//     .range([0, width]);
+// //   const yMax = Math.max(...data.flatMap(country => country.Years.map(y => Math.max(y.Movies, y.TVShows))));
+// //   const yScale = scaleLinear()
+// //     .domain([0, yMax])
+// //     .range([height - margin.bottom, margin.top]);
 
-//   const yScale = scaleLinear()
-//     .domain([0, Math.max(maxMovieCount, maxTVShowCount)])
-//     .range([height, 0]);
+// //   const colorScale = scaleOrdinal(schemeSet3);
 
-//   const colorScale = scaleOrdinal(schemeCategory10);
+// //   // 线生成器
+// //   const movieLineGenerator = line()
+// //     .x(d => xScale(new Date(d.year, 0, 1)))
+// //     .y(d => yScale(d.Movies));
 
-//   const lineGenerator = line()
-//     .x(d => xScale(d.year))
-//     .y(d => yScale(d.value));
+// //   const tvShowLineGenerator = line()
+// //     .x(d => xScale(new Date(d.year, 0, 1)))
+// //     .y(d => yScale(d.TVShows))
+// //     // .curve(d3.curveStepAfter); // 可以用来使虚线更明显
 
-//   // 用于显示和隐藏国家标签的状态
-//   const [tooltipContent, setTooltipContent] = useState(null);
-//   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
-//   // 处理鼠标移动事件
-//   const handleMouseMove = (event, country) => {
-//     const mouseX = event.nativeEvent.offsetX;
-//     const mouseY = event.nativeEvent.offsetY;
-//     setTooltipContent(country);
-//     setTooltipPosition({ x: mouseX, y: mouseY });
-//   };
+// //   return (
+// //     <svg width={width} height={height}>
+// //       {/* X 轴 */}
+// //       <XAxis xScale={xScale} height={height - margin.bottom} />
+// //       {/* Y 轴 */}
+// //       <YAxis yScale={yScale} width={width - margin.left} />
 
-//   // 处理鼠标移出事件
-//   const handleMouseOut = () => {
-//     setTooltipContent(null);
-//   };
+// //       {/* 数据线 */}
+// //       {data.map((country, idx) => (
+// //         <g key={idx}>
+// //           {/* 电影线 */}
+// //           <path
+// //             d={movieLineGenerator(country.Years)}
+// //             stroke={colorScale(idx)}
+// //             strokeWidth={2}
+// //             fill="none"
+// //             />
+// //           {/* 电视剧线 */}
+// //           <path
+// //             d={tvShowLineGenerator(country.Years)}
+// //             stroke={colorScale(idx)}
+// //             strokeWidth={2}
+// //             fill="none"
+// //             strokeDasharray="5,5"/>
+// //         </g>
+// //       ))}
 
-//   return (
-//     // <svg width={width} height={height}>
-//     //   {/* 添加横坐标标签 */}
-//     //   <text x={width / 2} y={height + 40} textAnchor="middle" fill="black">
-//     //     year
-//     //   </text>
-//     //   {/* 添加纵坐标标签 */}
-//     //   <text x={-height / 2} y={-50} transform={`rotate(-90)`} textAnchor="middle" fill="black">
-//     //     count
-//     //   </text>
-//     //   {/* 渲染横纵坐标 */}
-//     //   <XAxis xScale={xScale} width={width} height={height} />
-//     //   <YAxis yScale={yScale} height={height} offsetX={50} />
+// //       {/* 图例 */}
+// //       <g transform={`translate(${width - margin.right + 20}, ${margin.top})`}>
+// //         {data.map((country, idx) => (
+// //           <g key={idx} transform={`translate(0, ${idx * 20})`}>
+// //             <rect width={15} height={15} fill={colorScale(idx)} />
+// //             <text x={20} y={12} fontSize="12">{country.country}</text>
+// //           </g>
+// //         ))}
+// //       </g>
 
-//         <svg width={width} height={height}>
-//       {/* 添加横坐标标签 */}
-//       <text x={width / 2} y={height + 40} textAnchor="middle" fill="black">
-//         Year
-//       </text>
-//       {/* 添加纵坐标标签 */}
-//       <text
-//         x={-height / 2} y={-50}
-//         transform="rotate(-90)"
-//         transform-origin="center"
-//         textAnchor="middle"
-//         fill="black"
-//       >
-//         Count
-//       </text>
-//       {/* 渲染横纵坐标 */}
-//       <XAxis xScale={xScale} width={width} height={height} />
-//       <YAxis yScale={yScale} height={height} offsetX={50} />
+// //       {/* X 轴标签 */}
+// //       <text
+// //         x={(width - margin.left - margin.right) / 2 + margin.left}
+// //         y={height - 10}
+// //         textAnchor="middle"
+// //         fontSize="14"
+// //       >
+// //         Year
+// //       </text>
 
-//       {/* 渲染电影和电视节目的线条和标签 */}
-//       {data.map((countryData, idx) => (
-//         <g key={idx}>
-//           {/* 渲染电影的线条 */}
-//           <path d={lineGenerator(countryData.Years.map(y => ({ year: y.year, value: y.Movies })))}
-//                stroke={colorScale(idx)} strokeWidth={2} fill="none"
-//                onMouseMove={(event) => handleMouseMove(event, `${countryData.country} (Movies)`)}
-//                onMouseOut={handleMouseOut} />
-//           {/* 渲染电视节目的线条 */}
-//           <path d={lineGenerator(countryData.Years.map(y => ({ year: y.year, value: y.TVShows })))}
-//                stroke={colorScale(idx)} strokeWidth={2} fill="none" strokeDasharray="5,5"
-//                onMouseMove={(event) => handleMouseMove(event, `${countryData.country} (TV Shows)`)}
-//                onMouseOut={handleMouseOut} />
-//         </g>
-//       ))}
-//       {/* 渲染国家标签 */}
-//       {tooltipContent && (
-//         <g transform={`translate(${tooltipPosition.x}, ${tooltipPosition.y})`}>
-//           <rect x={5} y={-20} width={tooltipContent.length * 8} height={20} fill="white" stroke="black" strokeWidth="1" />
-//           <text x={10} y={-5} fill="black">{tooltipContent}</text>
-//         </g>
-//       )}
-//       {/* 添加图例 */}
-//       <g transform={`translate(${width - 150}, 30)`}>
-//         {data.map((countryData, idx) => (
-//           <g key={idx} transform={`translate(0, ${idx * 20})`}>
-//             <rect width="15" height="15" fill={colorScale(idx)} />
-//             <text x="20" y="12" fill="black">{countryData.country}</text>
-//           </g>
-//         ))}
-//         <g transform={`translate(0, ${data.length * 20 + 10})`}>
-//           <line x1="0" x2="15" y1="10" y2="10" stroke="black" strokeWidth="2" />
-//           <text x="20" y="12" fill="black">Movies</text>
-//         </g>
-//         <g transform={`translate(0, ${data.length * 20 + 30})`}>
-//           <line x1="0" x2="15" y1="10" y2="10" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
-//           <text x="20" y="12" fill="black">TV Shows</text>
-//         </g>
-//       </g>
-//     </svg>
-//   );
-// }
+// //       {/* Y 轴标签 */}
+// //       <text
+// //         x={0}
+// //         y={margin.top - 10}
+// //         textAnchor="middle"
+// //         fontSize="14"
+// //         transform={`translate(15, ${height / 2}) rotate(-90)`}
+// //       >
+// //         Quantity
+// //       </text>
+// //     </svg>
+// //   );
+// // }
 
-// export default Top5LineChart;
+// // export default Top5LineChart;
 
 import React, { useState } from "react";
 import { XAxis, YAxis } from "./axes";
-import { scaleLinear, scaleOrdinal, line, extent, schemeCategory10 } from 'd3';
+import { scaleTime, scaleLinear, scaleOrdinal, line, extent, schemeSet3 } from 'd3';
 
 function Top5LineChart({ data }) {
-  const width = 600; // 设置图表宽度
-  const height = 400; // 设置图表高度
-
-  // 计算电影和电视节目的最大数量，以便确定纵坐标范围
-  const maxMovieCount = Math.max(...data.flatMap(d => d.Years.map(y => y.Movies)));
-  const maxTVShowCount = Math.max(...data.flatMap(d => d.Years.map(y => y.TVShows)));
+  const width = 800; // 图表宽度
+  const height = 400; // 图表高度
+  const margin = { top: 20, right: 150, bottom: 50, left: 60 };
 
   // 创建比例尺
-  const xScale = scaleLinear()
-    .domain(extent(data.flatMap(d => d.Years.map(y => y.year))))
-    .range([0, width]);
+  const xScale = scaleTime()
+    .domain(extent(data.flatMap(country => country.Years.map(y => new Date(y.year, 0, 1)))))
+    .range([margin.left, width - margin.right]);
 
+  const yMax = Math.max(...data.flatMap(country => country.Years.map(y => Math.max(y.Movies, y.TVShows))));
   const yScale = scaleLinear()
-    .domain([0, Math.max(maxMovieCount, maxTVShowCount)])
-    .range([height, 0]);
+    .domain([0, yMax])
+    .range([height - margin.bottom, margin.top]);
 
-  const colorScale = scaleOrdinal(schemeCategory10);
+  const colorScale = scaleOrdinal(schemeSet3);
 
-  const lineGenerator = line()
-    .x(d => xScale(d.year))
-    .y(d => yScale(d.value));
+  // 线生成器
+  const movieLineGenerator = line()
+    .x(d => xScale(new Date(d.year, 0, 1)))
+    .y(d => yScale(d.Movies));
 
-  // 用于显示和隐藏国家标签的状态
-  const [tooltipContent, setTooltipContent] = useState(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const tvShowLineGenerator = line()
+    .x(d => xScale(new Date(d.year, 0, 1)))
+    .y(d => yScale(d.TVShows))
+    // .curve(d3.curveStepAfter); // 可以用来使虚线更明显
 
-  // 处理鼠标移动事件
-  const handleMouseMove = (event, country) => {
-    const mouseX = event.nativeEvent.offsetX;
-    const mouseY = event.nativeEvent.offsetY;
-    setTooltipContent(country);
-    setTooltipPosition({ x: mouseX, y: mouseY });
-  };
-
-  // 处理鼠标移出事件
-  const handleMouseOut = () => {
-    setTooltipContent(null);
-  };
+  const [hoveredCountry, setHoveredCountry] = useState(null);
 
   return (
     <svg width={width} height={height}>
-      {/* 添加横坐标标签 */}
-      <g transform={`translate(${width / 2}, ${height + 40})`}>
-        <text textAnchor="middle" fill="black">
-          Year
-        </text>
-      </g>
-      {/* 添加纵坐标标签 */}
-      <g transform={`translate(${-height / 2}, ${-50}) rotate(-90)`}>
-        <text textAnchor="middle" fill="black">
-          Count
-        </text>
-      </g>
-      {/* 渲染横纵坐标 */}
-      <XAxis xScale={xScale} height={height} width={width} axisLabel={"Year"} />
-      <YAxis yScale={yScale} height={height} offsetX={50} axisLabel={"Count"} />
+      {/* X 轴 */}
+      <XAxis xScale={xScale} height={height - margin.bottom} />
+      {/* Y 轴 */}
+      <YAxis yScale={yScale} width={width - margin.left} />
 
-      {/* 渲染电影和电视节目的线条和标签 */}
-      {data.map((countryData, idx) => (
+      {/* 数据线 */}
+      {data.map((country, idx) => (
         <g key={idx}>
-          {/* 渲染电影的线条 */}
-          <path d={lineGenerator(countryData.Years.map(y => ({ year: y.year, value: y.Movies })))}
-               stroke={colorScale(idx)} strokeWidth={2} fill="none"
-               onMouseMove={(event) => handleMouseMove(event, `${countryData.country} (Movies)`)}
-               onMouseOut={handleMouseOut} />
-          {/* 渲染电视节目的线条 */}
-          <path d={lineGenerator(countryData.Years.map(y => ({ year: y.year, value: y.TVShows })))}
-               stroke={colorScale(idx)} strokeWidth={2} fill="none" strokeDasharray="5,5"
-               onMouseMove={(event) => handleMouseMove(event, `${countryData.country} (TV Shows)`)}
-               onMouseOut={handleMouseOut} />
+          {/* 电影线 */}
+          <path
+            d={movieLineGenerator(country.Years)}
+            stroke={colorScale(idx)}
+            strokeWidth={2}
+            fill="none"
+            onMouseOver={() => setHoveredCountry(country)}
+            onMouseOut={() => setHoveredCountry(null)}
+          />
+          {/* 电视剧线 */}
+          <path
+            d={tvShowLineGenerator(country.Years)}
+            stroke={colorScale(idx)}
+            strokeWidth={2}
+            fill="none"
+            strokeDasharray="5,5"
+            onMouseOver={() => setHoveredCountry(country)}
+            onMouseOut={() => setHoveredCountry(null)}
+          />
         </g>
       ))}
-      {/* 渲染国家标签 */}
-      {tooltipContent && (
-        <g transform={`translate(${tooltipPosition.x}, ${tooltipPosition.y})`}>
-          <rect x={5} y={-20} width={tooltipContent.length * 8} height={20} fill="white" stroke="black" strokeWidth="1" />
-          <text x={10} y={-5} fill="black">{tooltipContent}</text>
-        </g>
-      )}
-      {/* 添加图例 */}
-      <g transform={`translate(${width - 100}, 30)`}>
-        {data.map((countryData, idx) => (
+
+      {/* 图例 */}
+      <g transform={`translate(${width - margin.right + 20}, ${margin.top})`}>
+        {data.map((country, idx) => (
           <g key={idx} transform={`translate(0, ${idx * 20})`}>
-            <rect width="10" height="10" fill={colorScale(idx)} />
-            <text x="15" y="8" fill="black" fontSize="10">{countryData.country}</text>
+            <rect width={15} height={15} fill={colorScale(idx)} />
+            <text x={20} y={12} fontSize="12">{country.country}</text>
           </g>
         ))}
-        <g transform={`translate(0, ${data.length * 20 + 10})`}>
-          <line x1="0" x2="15" y1="5" y2="5" stroke="black" strokeWidth="2" />
-          <text x="20" y="8" fill="black" fontSize="10">Movies</text>
-        </g>
-        <g transform={`translate(0, ${data.length * 20 + 25})`}>
-          <line x1="0" x2="15" y1="5" y2="5" stroke="black" strokeWidth="2" strokeDasharray="5,5" />
-          <text x="20" y="8" fill="black" fontSize="10">TV Shows</text>
-        </g>
       </g>
+
+      {/* X 轴标签 */}
+      <text
+        x={(width - margin.left - margin.right) / 2 + margin.left}
+        y={height - 10}
+        textAnchor="middle"
+        fontSize="14"
+      >
+        Year
+      </text>
+
+      {/* Y 轴标签 */}
+      <text
+        x={0}
+        y={margin.top - 10}
+        textAnchor="middle"
+        fontSize="14"
+        transform={`translate(15, ${height / 2}) rotate(-90)`}
+      >
+        Quantity
+      </text>
+
+      {/* Hovered Country Info */}
+      {hoveredCountry && (
+        <text
+          x={width - margin.right}
+          y={margin.top}
+          textAnchor="end"
+          fontSize="12"
+          fill={colorScale(data.indexOf(hoveredCountry))}
+        >
+          {hoveredCountry.country}
+        </text>
+      )}
     </svg>
   );
 }
