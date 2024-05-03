@@ -59,6 +59,35 @@ export async function getStaticProps() {
 export default function Home({ bubbleData, lineChartData, treemapData}) {
   return (
     <>
+      {/* <Head>
+        <title>Netflix Entertainment Analysis</title>
+        <meta name="description" content="Visualizing Netflix Content Distribution by Country" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className={styles.main}>
+        <h1>Netflix Content Distribution by Country</h1>
+        <Container fluid>
+          <Row>
+            <Col>
+            <h2>Entertainment Across Countries</h2>
+              <Bubble width={600} height={400} data={ bubbleData } />
+            </Col>
+            <Col md={6}>
+            <h2>Movie v.s. TV Trend among Top 5 Counrties</h2>
+            <Top5LineChart data={ lineChartData } />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+            <h2> Genre Analysis among Top 5 countries</h2>
+              <Treemap data={treemapData} width={800} height={600} />
+            </Col>
+          </Row>
+        </Container>
+      </main>
+    </>
+  );
+} */}
       <Head>
         <title>Netflix Entertainment Analysis</title>
         <meta name="description" content="Visualizing Netflix Content Distribution by Country" />
@@ -69,14 +98,19 @@ export default function Home({ bubbleData, lineChartData, treemapData}) {
         <Container fluid>
           <Row>
             <Col>
+              <h2>Entertainment Across Countries</h2>
               <Bubble width={600} height={400} data={ bubbleData } />
             </Col>
+          </Row>
+          <Row>
             <Col md={6}>
-            <Top5LineChart data={ lineChartData } />
+              <h2>Movie v.s. TV Trend among Top 5 Countries</h2>
+              <Top5LineChart data={ lineChartData } />
             </Col>
           </Row>
           <Row>
             <Col>
+              <h2>Genre Analysis among Top 5 Countries</h2>
               <Treemap data={treemapData} width={800} height={600} />
             </Col>
           </Row>
