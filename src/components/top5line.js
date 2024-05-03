@@ -125,7 +125,7 @@
 
 import React from "react";
 import { XAxis, YAxis } from "./axes";
-import { scaleTime, scaleLinear, scaleOrdinal, line, extent, schemeSet3 } from 'd3';
+import { scaleTime, scaleLinear, scaleOrdinal, line, extent, schemePaired } from 'd3';
 
 function Top5LineChart({ data }) {
   const width = 700;
@@ -141,7 +141,7 @@ function Top5LineChart({ data }) {
     .domain([0, yMax])
     .range([height - margin.bottom, margin.top]);
 
-  const colorScale = scaleOrdinal(schemeSet3);
+  const colorScale = scaleOrdinal(schemePaired);
 
   const movieLineGenerator = line()
     .x(d => xScale(new Date(d.year, 0, 1)))
