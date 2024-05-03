@@ -94,7 +94,7 @@ export default function Home({ bubbleData, lineChartData, treemapData}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1>Netflix Content Distribution by Country</h1>
+        <h1>Netflix Entertainment Analysis</h1>
         <Container fluid>
           <Row>
             <Col>
