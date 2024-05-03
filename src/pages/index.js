@@ -94,23 +94,23 @@ export default function Home({ bubbleData, lineChartData, treemapData}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1>Netflix Entertainment Analysis</h1>
+        <h1 className={styles.title}>Netflix Entertainment Analysis</h1>
         <Container fluid>
           <Row>
             <Col>
-              <h2>Entertainment Across Countries</h2>
+              <h2 className={styles.subtitle}>Entertainment Across Countries</h2>
               <Bubble width={600} height={400} data={ bubbleData } />
             </Col>
           </Row>
           <Row>
             <Col md={6}>
-              <h2>Movie v.s. TV Trend among Top 5 Countries</h2>
+              <h2 className={styles.subtitle}>Movie v.s. TV Trend among Top 5 Countries</h2>
               <Top5LineChart data={ lineChartData } />
             </Col>
           </Row>
           <Row>
             <Col>
-              <h2>Genre Analysis among Top 5 Countries</h2>
+              <h2 className={styles.subtitle}>Genre Analysis among Top 5 Countries</h2>
               <Treemap data={treemapData} width={800} height={600} />
             </Col>
           </Row>
